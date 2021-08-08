@@ -29,7 +29,7 @@ def test():
         while True:
             result = adc.read_wait_target(target=0.5,
                                           timeout=1000,
-                                          greater=False,
+                                          greater=False,  # Target is less than
                                           vref=vref,
                                           resolution=23)  # ADC resolution
 
