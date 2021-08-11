@@ -353,6 +353,8 @@ class ADC(object):
         Notes:
             Gains 1, 2, and 4 can be used without the PGA.
             In this case, gain is obtained by a switched-capacitor structure.
+            For mux settings where AINN = AVSS, the PGA must be disabled (PGA_BYPASS = 1)
+            and only gains 1, 2, and 4 can be used.
         """
         if not 0 <= gain <= 7:
             raise ValueError("Invalid gain value.")
