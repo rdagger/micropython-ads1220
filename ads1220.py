@@ -357,7 +357,7 @@ class ADC(object):
         if not 0 <= gain <= 7:
             raise ValueError("Invalid gain value.")
         self.reg0 &= ~self.PGA_GAIN_MASK
-        self.reg0 |= gain
+        self.reg0 |= (gain << 1)
         self.write_register(self.REG0_ADDRESS, self.reg0)
 
     def pga_on(self):
