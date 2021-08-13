@@ -353,7 +353,7 @@ class ADC(object):
         Notes:
             Gains 1, 2, and 4 can be used without the PGA.
             In this case, gain is obtained by a switched-capacitor structure.
-            For mux settings where AINN = AVSS, the PGA must be disabled (PGA_BYPASS = 1)
+            For mux settings where AINN = AVSS, the PGA must be disabled
             and only gains 1, 2, and 4 can be used.
         """
         if not 0 <= gain <= 7:
@@ -451,6 +451,25 @@ class ADC(object):
         else:
             # Positive voltage
             return int.from_bytes(data, 'big')
+
+    def read_wait_negative(self, timeout=1000):
+        """Monitor currently selected ADC channel until voltage negative.
+           Args:
+                timeout(int): Number of reads before timeout (default=1000)
+            Returns:
+                True if negative acquired otherwise false if timeout
+           """
+        counter = 0
+        while counter <= timeout:
+            while self.drdy.value() != 0:  # Wait for data ready pin to go low
+                pass
+            data = self.read_spi(3)
+            if data[0] & 0b10000000:
+                # Negative voltage
+                return True
+
+            counter += 1
+        return False
 
     def read_wait_target(self, target, timeout=1000, greater=True,
                          vref=2.048, resolution=23):
